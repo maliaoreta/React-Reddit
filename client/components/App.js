@@ -44,7 +44,9 @@ class App extends React.Component{
   }
   handleRandomSubreddit() {
     fetch('https://www.reddit.com/r/random')
-      .then((response) => response.text())
+      .then((response) => {
+        return response.text()
+      })
       .then((responseText) => {
         console.log('responseText: ', responseText);
       })
