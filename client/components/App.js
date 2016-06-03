@@ -24,7 +24,7 @@ class App extends React.Component{
   render() {
     return (
       <div className="app">
-        <div className="header">
+        <div className="header" style={{fontWeight: 'bold', fontSize: '2em'}}>
           React Reddit
         </div>
         <RedditContent redditContent={this.state.redditContent} />
