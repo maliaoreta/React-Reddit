@@ -6,12 +6,16 @@ class RedditContent extends React.Component{
 
     this.state = {
       giphyAlert: false,
-      giphyData: {}
+      giphyData: {},
+      postURL: '',
+      postTitle: ''
     }
 
     this.onMouseUp = this.onMouseUp.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.getGiphy = this.getGiphy.bind(this);
+    this.handlePostTitleClick = this.handlePostTitleClick.bind(this);
+    this.handleViewClick = this.handleViewClick.bind(this);
   }
   onMouseUp() {
     this.setState({giphyAlert: true})
@@ -26,7 +30,7 @@ class RedditContent extends React.Component{
         return (
           <div key={eachPost.data.id} className="post" style={{margin: '1em'}}>
             <div className="postTitle" style={{fontWeight: 'bold'}} onClick={this.onMouseUp}>
-              {eachPost.data.title}
+              <a href={eachPost.data.url} onClick={this.handlePostTitleClick}>{eachPost.data.title}</a>
             </div>
             <img className="postPreview" src={eachPost.data.preview.images[0].source.url} style={{height: 500, width: 500}} />
           </div>
@@ -35,7 +39,7 @@ class RedditContent extends React.Component{
         return (
           <div key={eachPost.data.id} className="post" style={{margin: '1em'}}>
             <div className="postTitle" style={{fontWeight: 'bold'}} onClick={this.onMouseUp}>
-              {eachPost.data.title}
+              <a href={eachPost.data.url}>{eachPost.data.title}</a>
             </div>
           </div>
         )
@@ -43,7 +47,9 @@ class RedditContent extends React.Component{
     })
   }
   getGiphy() {
-    fetch('http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=cute+puppy')
+    let giphyQuery = this.refs.giphyQuery.value.replace(/ /g, '+');
+    
+    fetch(`http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=${giphyQuery}`)
       .then((response) => response.text())
       .then((responseText) => {
         this.setState({giphyData: JSON.parse(responseText)})
@@ -51,6 +57,14 @@ class RedditContent extends React.Component{
       .catch((error) => {
         console.error(error);
       })
+  }
+  handlePostTitleClick(event) {
+    event.preventDefault();
+    this.setState({postURL: event.currentTarget.getAttribute('href')})
+    this.setState({postTitle: event.currentTarget.text})
+  }
+  handleViewClick() {
+    window.location = this.state.postURL;
   }
   render() {
     let displayGiphyAlert = 'none';
@@ -62,8 +76,10 @@ class RedditContent extends React.Component{
       <div className="redditContent">
         {this.state.giphyAlert ?
           <div className="giphyAlert" style={{backgroundColor: 'pink'}}>
+            <textArea style={{resize: 'none', width: '95%'}} ref="giphyQuery" defaultValue={this.state.postTitle}/>
             <button className="giphyButton" onClick={this.getGiphy}>Giphy This</button>
-            <button className="closeGiphyButton" onClick={this.onMouseDown}>No Giphy</button>
+            <button className="viewPostButtton" onClick={this.handleViewClick}>View This Post</button>
+            <button className="closeGiphyButton" onClick={this.onMouseDown}>Exit</button>
             {this.state.giphyData.data ? <img src={this.state.giphyData.data.image_url} /> : null}
           </div>
         : null}
