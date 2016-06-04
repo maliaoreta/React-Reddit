@@ -1,0 +1,18 @@
+.redditContent {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.post {
+  margin: 2% 10% 0 10%;
+  padding: 1em;
+  text-align: center;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  border: 1px solid darken(#E0E0E0, 10%);
+  box-shadow: 0 2px 2px darken(#E0E0E0, 10%);
+}
+
+.postPreview {
+  width: 20em;
+}

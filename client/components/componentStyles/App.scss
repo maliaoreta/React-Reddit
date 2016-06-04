@@ -1,0 +1,59 @@
+@import 'reset';
+
+body {
+  background-color: #E0E0E0;
+}
+
+.headerContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  background-color: #494D4F;
+  height: 8em;
+}
+
+.header {
+  flex: 0 0 20%;
+  font-size: 3em;
+  color: #FFFFFF;
+  text-align: center;
+  border-right: 1px solid #FFFFFF;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.subredditHeader {
+  flex: 0 0 10%;
+  color: #FFFFFF;
+  font-size: 2em;
+  padding-left: 1em;
+}
+
+.inputSubredditContainer {
+  flex: 0 1 50%;
+  text-align: center;
+
+  input {
+    border-radius: 5px;
+    width: 50%;
+    padding: 0.5em;
+  }
+}
+
+.randomSubreddit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 1 10%;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 2em;
+  height: 100%;
+
+  &:hover {
+    background-color: lighten(#494D4F, 10%);
+    cursor: pointer;
+  }
+}
