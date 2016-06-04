@@ -10,11 +10,8 @@ class App extends React.Component{
       redditContent: {},
       subreddit: '',
       currSubreddit: '',
-      giphyAlert: false
     }
-
-    this.onMouseUp = this.onMouseUp.bind(this);
-    this.onMouseDown = this.onMouseDown.bind(this);
+    
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleRandomSubreddit = this.handleRandomSubreddit.bind(this);
@@ -31,16 +28,6 @@ class App extends React.Component{
       .catch((error) => {
         console.error('error', error); 
       })
-  }
-  onMouseUp() {
-    // if (window.getSelection().toString().length > 0) {
-      this.setState({giphyAlert: true})
-    //   console.log('window.getSelection().toString(): ', window.getSelection().toString());
-    // }
-  }
-  onMouseDown() {
-    window.getSelection().empty();
-    this.setState({giphyAlert: false})
   }
   handleInputChange(event) {
     this.setState({subreddit: event.target.value})
@@ -73,7 +60,7 @@ class App extends React.Component{
   }
   render() {
     return (
-      <div className="app" onMouseUp={this.onMouseUp}>
+      <div className="app">
         <div className="header" style={{fontWeight: 'bold', fontSize: '2em'}}>
           React Reddit
         </div>
