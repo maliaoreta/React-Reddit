@@ -1,5 +1,7 @@
 'use strict';
 
+import styles from './componentStyles/RedditContent.scss';
+
 class RedditContent extends React.Component{
   constructor(props) {
     super (props);
@@ -23,23 +25,24 @@ class RedditContent extends React.Component{
   onMouseDown() {
     window.getSelection().empty();
     this.setState({giphyAlert: false})
+    this.setState({giphyData: {}})
   }
   getRedditContent() {
     return this.props.redditContent.data.children.map((eachPost) => {
       if (eachPost.data.preview) {
         return (
-          <div key={eachPost.data.id} className="post" style={{margin: '1em'}}>
-            <div className="postTitle" style={{fontWeight: 'bold'}} onClick={this.onMouseUp}>
+          <div key={eachPost.data.id} className="post">
+            <div className="postTitle" onClick={this.onMouseUp}>
               <a href={eachPost.data.url} onClick={this.handlePostTitleClick}>{eachPost.data.title}</a>
             </div>
-            <img className="postPreview" src={eachPost.data.preview.images[0].source.url} style={{height: 500, width: 500}} />
+            <img className="postPreview" src={eachPost.data.preview.images[0].source.url} />
           </div>
         )
       } else {
         return (
-          <div key={eachPost.data.id} className="post" style={{margin: '1em'}}>
-            <div className="postTitle" style={{fontWeight: 'bold'}} onClick={this.onMouseUp}>
-              <a href={eachPost.data.url}>{eachPost.data.title}</a>
+          <div key={eachPost.data.id} className="post">
+            <div className="postTitle" onClick={this.onMouseUp}>
+              <a href={eachPost.data.url} onClick={this.handlePostTitleClick}>{eachPost.data.title}</a>
             </div>
           </div>
         )
@@ -75,7 +78,7 @@ class RedditContent extends React.Component{
     return (
       <div className="redditContent">
         {this.state.giphyAlert ?
-          <div className="giphyAlert" style={{backgroundColor: 'pink'}}>
+          <div className="giphyAlert">
             <textArea style={{resize: 'none', width: '95%'}} ref="giphyQuery" defaultValue={this.state.postTitle}/>
             <button className="giphyButton" onClick={this.getGiphy}>Giphy This</button>
             <button className="viewPostButtton" onClick={this.handleViewClick}>View This Post</button>
