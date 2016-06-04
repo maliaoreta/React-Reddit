@@ -1,6 +1,7 @@
 'use strict';
 
 import RedditContent from './RedditContent';
+import styles from './componentStyles/App.scss';
 
 class App extends React.Component{
   constructor(props) {
@@ -11,10 +12,11 @@ class App extends React.Component{
       subreddit: '',
       currSubreddit: '',
     }
-    
+
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleRandomSubreddit = this.handleRandomSubreddit.bind(this);
+    this.redirectHome = this.redirectHome.bind(this);
   }
   componentWillMount() {
     fetch('https://www.reddit.com/.json')
@@ -58,22 +60,28 @@ class App extends React.Component{
         console.error(error);
       })
   }
+  redirectHome() {
+    window.location = '/';
+  }
   render() {
     return (
       <div className="app">
-        <div className="header" style={{fontWeight: 'bold', fontSize: '2em'}}>
-          React Reddit
+        <div className="headerContainer">
+          <div className="header">
+            <div onClick={this.redirectHome}>Reddit Giphy</div>
+          </div>
+          <div className="subredditHeader">
+            <div>{this.state.currSubreddit}</div>
+          </div>
+          <div className="inputSubredditContainer">
+            <form onSubmit={this.handleFormSubmit}>
+              <input onChange={this.handleInputChange} placeholder="View A Subreddit" />
+            </form>
+          </div>
+          <div className="randomSubreddit" onClick={this.handleRandomSubreddit}>
+            <div>Random</div>
+          </div>
         </div>
-        <div className="inputSubredditContainer">
-          <form onSubmit={this.handleFormSubmit}>
-            <input onChange={this.handleInputChange} placeholder="View A Subreddit" />
-            <button>Submit</button>
-          </form>
-        </div>
-        <div className="randomSubreddit">
-          <button onClick={this.handleRandomSubreddit}>Random</button>
-        </div>
-        <div className="subredditHeader" style={{margin: '1em', fontWeight: 'bold'}}>{this.state.currSubreddit}</div>
         <RedditContent redditContent={this.state.redditContent} giphyAlert={this.state.giphyAlert} triggerMouseDown={this.onMouseDown} />
       </div>
     )
