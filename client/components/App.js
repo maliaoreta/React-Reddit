@@ -33,10 +33,10 @@ class App extends React.Component{
       })
   }
   onMouseUp() {
-    if (window.getSelection().toString().length > 0) {
+    // if (window.getSelection().toString().length > 0) {
       this.setState({giphyAlert: true})
-      console.log('window.getSelection().toString(): ', window.getSelection().toString());
-    }
+    //   console.log('window.getSelection().toString(): ', window.getSelection().toString());
+    // }
   }
   onMouseDown() {
     window.getSelection().empty();
