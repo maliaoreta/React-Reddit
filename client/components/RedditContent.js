@@ -3,24 +3,7 @@
 class RedditContent extends React.Component{
   constructor(props) {
     super (props);
-
-    // this.state = {
-    //   giphyAlert: false,
-    // }
-
-    // this.onMouseUp = this.onMouseUp.bind(this);
-    // this.onMouseDown = this.onMouseDown.bind(this);
   }
-  // onMouseUp() {
-  //   if (window.getSelection().toString().length > 0) {
-  //     this.setState({giphyAlert: true});
-  //   }
-  //   console.log('window.getSelection().toString(): ', window.getSelection().toString());
-  // }
-  // onMouseDown() {
-  //   window.getSelection().empty();
-  //   this.setState({giphyAlert: false})
-  // }
   getRedditContent() {
     return this.props.redditContent.data.children.map((eachPost) => {
       if (eachPost.data.preview) {
@@ -43,6 +26,9 @@ class RedditContent extends React.Component{
       }
     })
   }
+  getGiphy() {
+    console.log('heyhey');
+  }
   render() {
     let displayGiphyAlert = 'none';
     if (this.props.giphyAlert === true) {
@@ -52,10 +38,9 @@ class RedditContent extends React.Component{
     return (
       <div className="redditContent">
         {this.props.giphyAlert ?
-          <div className="giphyAlertBackground" style={{backgroundColor:'gray', border: '3em solid gray', display: `${displayGiphyAlert}`}}>
-            <div className="giphyAlert" style={{backgroundColor: 'pink'}}>
-              ohhaaaaay
-            </div>
+          <div className="giphyAlert" style={{backgroundColor: 'pink'}}>
+            <button className="giphyButton" onClick={this.getGiphy}>Giphy This</button>
+            <button className="closeGiphyButton" onClick={this.props.triggerMouseDown}>No Giphy</button>
           </div>
         : null}
         {this.props.redditContent.data ? this.getRedditContent() : null}

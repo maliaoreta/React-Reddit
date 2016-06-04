@@ -73,7 +73,7 @@ class App extends React.Component{
   }
   render() {
     return (
-      <div className="app" onMouseUp={this.onMouseUp} onMouseDown={this.onMouseDown}>
+      <div className="app" onMouseUp={this.onMouseUp}>
         <div className="header" style={{fontWeight: 'bold', fontSize: '2em'}}>
           React Reddit
         </div>
@@ -87,7 +87,7 @@ class App extends React.Component{
           <button onClick={this.handleRandomSubreddit}>Random</button>
         </div>
         <div className="subredditHeader" style={{margin: '1em', fontWeight: 'bold'}}>{this.state.currSubreddit}</div>
-        <RedditContent redditContent={this.state.redditContent} giphyAlert={this.state.giphyAlert} />
+        <RedditContent redditContent={this.state.redditContent} giphyAlert={this.state.giphyAlert} triggerMouseDown={this.onMouseDown} />
       </div>
     )
   }
