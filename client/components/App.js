@@ -9,9 +9,12 @@ class App extends React.Component{
     this.state = {
       redditContent: {},
       subreddit: '',
-      currSubreddit: ''
+      currSubreddit: '',
+      giphyAlert: false
     }
 
+    this.onMouseUp = this.onMouseUp.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleRandomSubreddit = this.handleRandomSubreddit.bind(this);
@@ -28,6 +31,16 @@ class App extends React.Component{
       .catch((error) => {
         console.error('error', error); 
       })
+  }
+  onMouseUp() {
+    if (window.getSelection().toString().length > 0) {
+      this.setState({giphyAlert: true})
+      console.log('window.getSelection().toString(): ', window.getSelection().toString());
+    }
+  }
+  onMouseDown() {
+    window.getSelection().empty();
+    this.setState({giphyAlert: false})
   }
   handleInputChange(event) {
     this.setState({subreddit: event.target.value})
@@ -60,7 +73,7 @@ class App extends React.Component{
   }
   render() {
     return (
-      <div className="app">
+      <div className="app" onMouseUp={this.onMouseUp} onMouseDown={this.onMouseDown}>
         <div className="header" style={{fontWeight: 'bold', fontSize: '2em'}}>
           React Reddit
         </div>
@@ -74,7 +87,7 @@ class App extends React.Component{
           <button onClick={this.handleRandomSubreddit}>Random</button>
         </div>
         <div className="subredditHeader" style={{margin: '1em', fontWeight: 'bold'}}>{this.state.currSubreddit}</div>
-        <RedditContent redditContent={this.state.redditContent} />
+        <RedditContent redditContent={this.state.redditContent} giphyAlert={this.state.giphyAlert} />
       </div>
     )
   }
