@@ -8,7 +8,8 @@ class App extends React.Component{
 
     this.state = {
       redditContent: {},
-      subreddit: ''
+      subreddit: '',
+      currSubreddit: ''
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -21,6 +22,7 @@ class App extends React.Component{
         return response.text();
       })
       .then((responseText) => {
+        this.setState({currSubreddit: '/r/all'})
         this.setState({redditContent: JSON.parse(responseText)});
       })
       .catch((error) => {
@@ -36,6 +38,7 @@ class App extends React.Component{
     fetch(`https://www.reddit.com/r/${this.state.subreddit}.json`)
       .then((response) => response.text())
       .then((responseText) => {
+        this.setState({currSubreddit: `/r/${this.state.subreddit}`})
         this.setState({redditContent: JSON.parse(responseText)})
       })
       .catch((error) => {
@@ -43,12 +46,13 @@ class App extends React.Component{
       })
   }
   handleRandomSubreddit() {
-    fetch('https://www.reddit.com/r/random')
+    fetch('https://www.reddit.com/r/random.json')
       .then((response) => {
+        this.setState({currSubreddit: response.url.match(/(\/r\/\w+\/)/)[0]}) 
         return response.text()
       })
       .then((responseText) => {
-        console.log('responseText: ', responseText);
+        this.setState({redditContent: JSON.parse(responseText)})
       })
       .catch((error) => {
         console.error(error);
@@ -69,6 +73,7 @@ class App extends React.Component{
         <div className="randomSubreddit">
           <button onClick={this.handleRandomSubreddit}>Random</button>
         </div>
+        <div className="subredditHeader" style={{margin: '1em', fontWeight: 'bold'}}>{this.state.currSubreddit}</div>
         <RedditContent redditContent={this.state.redditContent} />
       </div>
     )
