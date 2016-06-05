@@ -13,14 +13,10 @@ class RedditContent extends React.Component{
       postTitle: ''
     }
 
-    this.onMouseUp = this.onMouseUp.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.getGiphy = this.getGiphy.bind(this);
     this.handlePostTitleClick = this.handlePostTitleClick.bind(this);
     this.handleViewClick = this.handleViewClick.bind(this);
-  }
-  onMouseUp() {
-    this.setState({giphyAlert: true})
   }
   onMouseDown() {
     window.getSelection().empty();
@@ -32,8 +28,8 @@ class RedditContent extends React.Component{
       if (eachPost.data.preview) {
         return (
           <div key={eachPost.data.id} className="post">
-            <div className="postTitle" onClick={this.onMouseUp}>
-              <a href={eachPost.data.url} onClick={this.handlePostTitleClick}>{eachPost.data.title}</a>
+            <div className="postTitle">
+              <a href={eachPost.data.url} onClick={this.handlePostTitleClick}><span>{eachPost.data.title}</span></a>
             </div>
             <img className="postPreview" src={eachPost.data.preview.images[0].source.url} />
           </div>
@@ -41,7 +37,7 @@ class RedditContent extends React.Component{
       } else {
         return (
           <div key={eachPost.data.id} className="post">
-            <div className="postTitle" onClick={this.onMouseUp}>
+            <div className="postTitle">
               <a href={eachPost.data.url} onClick={this.handlePostTitleClick}>{eachPost.data.title}</a>
             </div>
           </div>
@@ -63,6 +59,7 @@ class RedditContent extends React.Component{
   }
   handlePostTitleClick(event) {
     event.preventDefault();
+    this.setState({giphyAlert: true})
     this.setState({postURL: event.currentTarget.getAttribute('href')})
     this.setState({postTitle: event.currentTarget.text})
   }
@@ -79,11 +76,13 @@ class RedditContent extends React.Component{
       <div className="redditContent">
         {this.state.giphyAlert ?
           <div className="giphyAlert">
-            <textArea style={{resize: 'none', width: '95%'}} ref="giphyQuery" defaultValue={this.state.postTitle}/>
-            <button className="giphyButton" onClick={this.getGiphy}>Giphy This</button>
-            <button className="viewPostButtton" onClick={this.handleViewClick}>View This Post</button>
-            <button className="closeGiphyButton" onClick={this.onMouseDown}>Exit</button>
-            {this.state.giphyData.data ? <img src={this.state.giphyData.data.image_url} /> : null}
+              <div className="giphyContent">
+              <textArea className="giphyTextArea" style={{resize: 'none', width: '95%'}} ref="giphyQuery" defaultValue={this.state.postTitle}/>
+              <button className="exitGiphyButton" onClick={this.onMouseDown}>Exit</button>
+              {this.state.giphyData.data ? <img src={this.state.giphyData.data.image_url} /> : null}
+              <button className="giphyButton" onClick={this.getGiphy}>Giphy This</button>
+              <button className="viewPostButtton" onClick={this.handleViewClick}>View This Post</button>
+            </div>
           </div>
         : null}
         {this.props.redditContent.data ? this.getRedditContent() : null}
