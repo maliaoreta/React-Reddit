@@ -1,6 +1,7 @@
 .redditContent {
   display: flex;
   flex-flow: column nowrap;
+  height: 100%;
 }
 
 .post {
@@ -13,6 +14,49 @@
   box-shadow: 0 2px 2px darken(#E0E0E0, 10%);
 }
 
+.postTitle {
+
+  a {
+    text-decoration: none;
+    color: #494D4F;
+    font-size: 1.3em;
+
+    &:hover {
+      color: lighten(#494D4F, 10%);
+    }
+  }
+}
+
 .postPreview {
   width: 20em;
+}
+
+.giphyAlert {
+  display: flex;
+  background-color: rgba(128, 128, 128, 0.8);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.giphyContent {
+  display: flex;
+  flex-flow: row wrap;
+  background-color: rgba(255, 255, 255, 0.9);
+  position: fixed;
+  height: 50%;
+  width: 50%;
+  margin: 5% 25%;
+  border-radius: 5px;
+}
+
+.giphyTextArea {
+  flex: 0 1 90%;
+  margin: 1em;
+  height: 20%;
+}
+
+.exitGiphyButton {
+  height: 10%;
+  margin-top: 1em;
 }
