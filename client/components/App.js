@@ -2,6 +2,19 @@
 
 import RedditContent from './RedditContent';
 import styles from './componentStyles/App.scss';
+import TextField from 'material-ui/TextField';
+import { white } from 'material-ui/styles/colors';
+
+const style = {
+  floatingLabelFocusStyle: {
+    color: white,
+    fontSize: '1.5em'
+  },
+  underlineFocusStyle: {
+    borderColor: white,
+    borderWidth: '1px'
+  }
+}
 
 class App extends React.Component{
   constructor(props) {
@@ -75,7 +88,12 @@ class App extends React.Component{
           </div>
           <div className="inputSubredditContainer">
             <form onSubmit={this.handleFormSubmit}>
-              <input onChange={this.handleInputChange} placeholder="View A Subreddit" />
+              <TextField
+                onChange={this.handleInputChange}
+                floatingLabelText={<p className="inputText"><i className="material-icons">search</i> Subreddit</p>}
+                floatingLabelFocusStyle={style.floatingLabelFocusStyle}
+                underlineFocusStyle={style.underlineFocusStyle}
+              />
             </form>
           </div>
           <div className="randomSubreddit" onClick={this.handleRandomSubreddit}>
