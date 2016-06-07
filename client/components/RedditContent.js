@@ -1,6 +1,25 @@
 'use strict';
 
 import styles from './componentStyles/RedditContent.scss';
+import TextField from 'material-ui/TextField';
+import { black, grey400, grey600 } from 'material-ui/styles/colors';
+
+const style = {
+  underlineFocusStyle: {
+    borderColor: black,
+    borderWidth: '1px'
+  },
+  underlineStyle: {
+    borderColor: grey400,
+    borderWidth: '1px'
+  },
+  inputStyle: {
+    color: grey600
+  },
+  inputStyleFocus: {
+    color: black
+  }
+}
 
 class RedditContent extends React.Component{
   constructor(props) {
@@ -10,18 +29,23 @@ class RedditContent extends React.Component{
       giphyAlert: false,
       giphyData: {},
       postURL: '',
-      postTitle: ''
+      postTitle: '',
+      textFieldFocus: false
     }
 
     this.onMouseDown = this.onMouseDown.bind(this);
     this.getGiphy = this.getGiphy.bind(this);
     this.handlePostTitleClick = this.handlePostTitleClick.bind(this);
     this.handleViewClick = this.handleViewClick.bind(this);
+    this.handleTextFieldFocus = this.handleTextFieldFocus.bind(this);
   }
   onMouseDown() {
     window.getSelection().empty();
     this.setState({giphyAlert: false})
     this.setState({giphyData: {}})
+  }
+  handleTextFieldFocus() {
+    this.setState({textFieldFocus: !this.state.textFieldFocus})
   }
   getRedditContent() {
     return this.props.redditContent.data.children.map((eachPost) => {
@@ -46,8 +70,9 @@ class RedditContent extends React.Component{
     })
   }
   getGiphy() {
-    let giphyQuery = this.refs.giphyQuery.value.replace(/ /g, '+');
-    
+    let giphyQuery = this.refs.giphyQuery.input.value.replace(/ /g, '+');
+
+
     fetch(`http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=${giphyQuery}`)
       .then((response) => response.text())
       .then((responseText) => {
@@ -77,7 +102,17 @@ class RedditContent extends React.Component{
         {this.state.giphyAlert ?
           <div className="giphyAlert">
               <div className="giphyContent">
-              <textArea className="giphyTextArea" style={{resize: 'none', width: '95%'}} ref="giphyQuery" defaultValue={this.state.postTitle}/>
+              <TextField
+                defaultValue={this.state.postTitle}
+                className="giphyTextArea"
+                id="text-field-default"
+                ref="giphyQuery"
+                underlineFocusStyle={style.underlineFocusStyle}
+                underlineStyle={style.underlineStyle}
+                inputStyle={this.state.textFieldFocus ? style.inputStyleFocus : style.inputStyle}
+                onFocus={this.handleTextFieldFocus}
+                onBlur={this.handleTextFieldFocus}
+              /> 
               <button className="exitGiphyButton" onClick={this.onMouseDown}>Exit</button>
               {this.state.giphyData.data ? <img src={this.state.giphyData.data.image_url} /> : null}
               <button className="giphyButton" onClick={this.getGiphy}>Giphy This</button>
@@ -92,3 +127,6 @@ class RedditContent extends React.Component{
 }
 
 export default RedditContent;
+
+
+// <textArea className="giphyTextArea" style={{resize: 'none', width: '95%'}} ref="giphyQuery" defaultValue={this.state.postTitle}/>
