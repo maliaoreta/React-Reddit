@@ -2,6 +2,7 @@
 
 import styles from './componentStyles/RedditContent.scss';
 import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
 import { black, grey400, grey600 } from 'material-ui/styles/colors';
 
 const style = {
@@ -14,10 +15,12 @@ const style = {
     borderWidth: '1px'
   },
   inputStyle: {
-    color: grey600
+    color: grey600,
+    fontWeight: 300
   },
   inputStyleFocus: {
-    color: black
+    color: black,
+    fontWeight: 400
   }
 }
 
@@ -49,7 +52,22 @@ class RedditContent extends React.Component{
   }
   getRedditContent() {
     return this.props.redditContent.data.children.map((eachPost) => {
-      if (eachPost.data.preview) {
+      if (eachPost.data.media) {
+        // if post has gif preview
+        let gifSrc = eachPost.data.secure_media_embed.content.split(' ');
+        gifSrc = gifSrc[2].replace('src=\"', '').replace(gifSrc[gifSrc.length-1], '').replace(/&amp;/g, '&');
+
+        return (
+          <div key={eachPost.data.id} className="post">
+            <div className="postTitle">
+              <a href={eachPost.data.url} onClick={this.handlePostTitleClick}><span>{eachPost.data.title}</span></a>
+            </div>
+            <iframe className="postPreview" src={gifSrc} scrolling="no" />
+          </div>
+        )
+      }
+      else if (eachPost.data.preview) {
+        // if post has an image preview
         return (
           <div key={eachPost.data.id} className="post">
             <div className="postTitle">
@@ -58,8 +76,10 @@ class RedditContent extends React.Component{
             <img className="postPreview" src={eachPost.data.preview.images[0].source.url} />
           </div>
         )
-      } else {
+      } 
+      else {
         return (
+          // regular text post
           <div key={eachPost.data.id} className="post">
             <div className="postTitle">
               <a href={eachPost.data.url} onClick={this.handlePostTitleClick}>{eachPost.data.title}</a>
@@ -97,29 +117,38 @@ class RedditContent extends React.Component{
       displayGiphyAlert = 'block';
     }
 
+    const actions = [
+      <button className="giphyButton" onClick={this.getGiphy}>Giphy This</button>,
+      <button className="viewPostButtton" onClick={this.handleViewClick}>View This Post</button> 
+    ]
+
     return (
       <div className="redditContent">
-        {this.state.giphyAlert ?
-          <div className="giphyAlert">
-              <div className="giphyContent">
-              <TextField
-                defaultValue={this.state.postTitle}
-                className="giphyTextArea"
-                id="text-field-default"
-                ref="giphyQuery"
-                underlineFocusStyle={style.underlineFocusStyle}
-                underlineStyle={style.underlineStyle}
-                inputStyle={this.state.textFieldFocus ? style.inputStyleFocus : style.inputStyle}
-                onFocus={this.handleTextFieldFocus}
-                onBlur={this.handleTextFieldFocus}
-              /> 
-              <button className="exitGiphyButton" onClick={this.onMouseDown}>Exit</button>
-              {this.state.giphyData.data ? <img src={this.state.giphyData.data.image_url} /> : null}
-              <button className="giphyButton" onClick={this.getGiphy}>Giphy This</button>
-              <button className="viewPostButtton" onClick={this.handleViewClick}>View This Post</button>
-            </div>
+        <Dialog
+          title="Giphy"
+          actions={actions} 
+          modal={false}
+          open={this.state.giphyAlert}
+          onRequestClose={this.onMouseDown}
+          bodyStyle={{ backgroundColor: '#FFFFFF' }}
+          titleStyle={{ backgroundColor: '#ADABAC' }}
+          actionsContainerStyle={{ backgroundColor: '#ADABAC' }}
+        >
+          <div className="giphyTextArea">
+            <TextField
+              defaultValue={this.state.postTitle}
+              className="giphyTextArea"
+              id="text-field-default"
+              ref="giphyQuery"
+              underlineFocusStyle={style.underlineFocusStyle}
+              underlineStyle={style.underlineStyle}
+              inputStyle={this.state.textFieldFocus ? style.inputStyleFocus : style.inputStyle}
+              onFocus={this.handleTextFieldFocus}
+              onBlur={this.handleTextFieldFocus}
+            />
           </div>
-        : null}
+          {this.state.giphyData.data ? <img className="giphy" src={this.state.giphyData.data.image_url} /> : null}
+        </Dialog>
         {this.props.redditContent.data ? this.getRedditContent() : null}
       </div>
     )
@@ -127,6 +156,3 @@ class RedditContent extends React.Component{
 }
 
 export default RedditContent;
-
-
-// <textArea className="giphyTextArea" style={{resize: 'none', width: '95%'}} ref="giphyQuery" defaultValue={this.state.postTitle}/>
